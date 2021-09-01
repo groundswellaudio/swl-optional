@@ -14,6 +14,6 @@ the root of the repository in the search path, e.g. : \
 `g++ -std=c++20 ./tests/test_main.cpp -I .`
 
 ## Tested compilers
+- GCC 11+
 - GCC 10+ (the early 10.X versions have a bug in `std::construct_at`, which prevent to use it in a constexpr context, hence the tests might not compile)
-
-TODO : test more compilers
+- Clang will not fully work as its implementation of C++20 is still incomplete (Clang 12+ will work for trivially destructible type)
