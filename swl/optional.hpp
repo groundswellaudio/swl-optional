@@ -93,7 +93,7 @@ class optional {
 		requires (std::is_copy_constructible_v<T> and not std::is_trivially_copy_constructible_v<T>)
 	: active{o.active}
 	{
-		if (not o.active){
+		if (not active){
 			maybe_init_union();
 			return;
 		}
@@ -109,7 +109,7 @@ class optional {
 		requires (std::is_move_constructible_v<T> and not std::is_trivially_move_constructible_v<T>)
 	: active{o.active}
 	{
-		if (not o.active){
+		if (not active){
 			maybe_init_union();
 			return;
 		}
@@ -152,7 +152,7 @@ class optional {
 		requires opt_ctor_req<const U&, U>
 	: active{o.has_value()}
 	{
-		if (not o){
+		if (not active){
 			maybe_init_union();
 			return;
 		}
@@ -164,7 +164,7 @@ class optional {
 		requires opt_ctor_req<U&&, U>
 	: active{o.has_value()}
 	{
-		if (not o){
+		if (not active){
 			maybe_init_union();
 			return;
 		}
@@ -177,7 +177,7 @@ class optional {
 	constexpr optional& operator=(const optional& o)
 		requires (has_copy and not has_trivial_copy)
 	{
-		switch( static_cast<char>(active) + static_cast<char>(o.active) * 2 ){
+		switch( char(active) + char(o.active) * 2 ){
 			case 0 : // no value in either
 				break; 
 			case 1 : // rhs is empty
@@ -204,7 +204,7 @@ class optional {
 	constexpr optional& operator=(optional&& o)
 		requires (has_move_assign and not has_trivial_move_assign)
 	{
-		switch( static_cast<char>(active) + static_cast<char>(o.active) * 2 ){
+		switch( char(active) + char(o.active) * 2 ){
 			case 0 : 
 				break; 
 			case 1 : 
@@ -525,6 +525,8 @@ MAKE_OP(<, true, false)
 MAKE_OP(>, false, true)
 MAKE_OP(<=, true, false)
 MAKE_OP(>=, false, true)
+
+#undef MAKE_OP
 
 // =================================================================
 // specialized algorithms
