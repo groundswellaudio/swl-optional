@@ -1,3 +1,12 @@
+// ====================================================================
+// Developed in 2021 by Jean-Baptiste Vallon Hoarau
+// github : groundswellaudio 
+// jeanbaptiste.vallon@gmail.com
+// ====================================================================
+
+#ifndef SWL_CPP_LIBRARY_OPTIONAL_HPP
+#define SWL_CPP_LIBRARY_OPTIONAL_HPP
+
 #include <initializer_list>
 #include <type_traits>
 #include <memory>
@@ -541,9 +550,6 @@ constexpr auto make_optional(std::initializer_list<U> il, Args&&... args){
 
 } // SWL
 
-#undef SWL_MOV
-#undef SWL_FWD
-
 // =================================================================
 // hash support
 namespace std {
@@ -557,3 +563,8 @@ namespace std {
 		}
 	};
 } // STD
+
+#undef SWL_MOV
+#undef SWL_FWD
+
+#endif // header guards
