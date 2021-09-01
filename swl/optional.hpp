@@ -264,7 +264,7 @@ class optional {
 		return this->ptr();
 	}
 
-	constexpr T* operator->() const {
+	constexpr const T* operator->() const {
 		return this->ptr();
 	}
 
