@@ -93,11 +93,7 @@ class optional {
 		requires (std::is_copy_constructible_v<T> and not std::is_trivially_copy_constructible_v<T>)
 	: active{o.active}
 	{
-		if (not active){
-			maybe_init_union();
-			return;
-		}
-		this->construct_from(o.value_);
+		this->construct_from_optional(o);
 	}
 	
 	constexpr optional(optional&& o)
@@ -109,11 +105,7 @@ class optional {
 		requires (std::is_move_constructible_v<T> and not std::is_trivially_move_constructible_v<T>)
 	: active{o.active}
 	{
-		if (not active){
-			maybe_init_union();
-			return;
-		}
-		this->construct_from(SWL_FWD(o.value_));
+		this->construct_from_optional(SWL_FWD(o));
 	}
 	
 	// in place ctors
@@ -146,17 +138,13 @@ class optional {
 	}
 	
 	// conversion ctors
-	
+		
 	template <class U = T> 
 	constexpr explicit(not std::is_convertible_v<const U&, T>) optional(const optional<U>& o)
 		requires opt_ctor_req<const U&, U>
 	: active{o.has_value()}
 	{
-		if (not active){
-			maybe_init_union();
-			return;
-		}
-		this->construct_from(*o);
+		this->construct_from_optional(o);
 	}
 	
 	template <class U = T> 
@@ -164,11 +152,7 @@ class optional {
 		requires opt_ctor_req<U&&, U>
 	: active{o.has_value()}
 	{
-		if (not active){
-			maybe_init_union();
-			return;
-		}
-		this->construct_from(*o);
+		this->construct_from_optional(SWL_FWD(o));
 	}
 
 	// ======================================================
@@ -181,7 +165,7 @@ class optional {
 	constexpr optional& operator=(const optional& o)
 		requires (has_copy and not has_trivial_copy)
 	{
-		return this->assign_from_optional(SWL_FWD(o));
+		return this->assign_from_optional(o);
 	}
 
 	constexpr optional& operator=(optional&& o)
@@ -364,6 +348,14 @@ class optional {
 	constexpr void construct_from(Args&&... args){
 		std::construct_at(std::addressof(value_), static_cast<Args&&>(args)...);	
 		active = true;
+	}
+	
+	template <class Opt>
+	constexpr void construct_from_optional(Opt&& opt){
+		if (active)
+			this->construct_from(*SWL_FWD(opt));
+		else
+			this->maybe_init_union();
 	}
 
 	T* ptr(){ return std::addressof(value_); }
