@@ -415,6 +415,10 @@ class optional<T>;
 template <class T>
 class optional<T&>;
 
+// CTAD
+template<class T>
+optional(T) -> optional<T>;
+
 // =================================================================
 // relational operators
 
