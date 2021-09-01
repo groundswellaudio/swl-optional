@@ -173,29 +173,16 @@ class optional {
 
 	// ======================================================
 	// assign 
-
-	constexpr optional& operator=(const optional& o)
-		requires (has_copy and not has_trivial_copy)
-	{
-		switch( char(active) + char(o.active) * 2 ){
-			case 0 : // no value in either
-				break; 
-			case 1 : // rhs is empty
-				reset_no_check();
-				break;
-			case 2 : // this is empty
-				this->construct_from(o.value());
-				break;
-			case 3 : 
-				this->value_ = o.value();
-				break;
-		}
-		return *this;
-	}
-
+	
 	constexpr optional& operator=(const optional& o)
 		requires has_trivial_copy
 	= default;
+	
+	constexpr optional& operator=(const optional& o)
+		requires (has_copy and not has_trivial_copy)
+	{
+		return this->assign_from_optional(SWL_FWD(o));
+	}
 
 	constexpr optional& operator=(optional&& o)
 		requires has_trivial_move_assign
@@ -204,20 +191,7 @@ class optional {
 	constexpr optional& operator=(optional&& o)
 		requires (has_move_assign and not has_trivial_move_assign)
 	{
-		switch( char(active) + char(o.active) * 2 ){
-			case 0 : 
-				break; 
-			case 1 : 
-				reset_no_check();
-				break;
-			case 2 :
-				this->construct_from(SWL_FWD(o).value());
-				break;
-			case 3 : 
-				*this = SWL_FWD(o).value();
-				break;
-		}
-		return *this;
+		return this->assign_from_optional(SWL_FWD(o));
 	}
 	
 	template <class U = T>
@@ -241,40 +215,14 @@ class optional {
 	constexpr optional& operator=(const optional<U>& u)
 		requires opt_assign_req<const U&, U>
 	{
-		switch( char(active) + char(u.has_value()) * 2 ){
-			case 0 : 
-				break; 
-			case 1 : 
-				this->reset_no_check();
-				break;
-			case 2 :
-				this->construct_from(*u);
-				break;
-			case 3 : 
-				**this = *u;
-				break;
-		}
-		return *this;
+		return this->assign_from_optional(u);
 	}
 	
 	template <class U>
 	constexpr optional& operator=(optional<U>&& u)
 		requires opt_assign_req<U, U>
 	{
-		switch( char(active) + char(u.has_value()) * 2 ){
-			case 0 : 
-				break; 
-			case 1 : 
-				this->reset_no_check();
-				break;
-			case 2 :
-				this->construct_from(*SWL_FWD(u));
-				break;
-			case 3 : 
-				**this = *SWL_FWD(u);
-				break;
-		}
-		return *this;
+		return this->assign_from_optional(SWL_FWD(u));
 	}
 	
 	// ======================================================
@@ -385,7 +333,25 @@ class optional {
 	}
 	
 	private :
-
+	
+	template <class Opt>
+	constexpr auto& assign_from_optional(Opt&& o){
+		switch( char(active) + char(o.has_value()) * 2 ){
+			case 0 : 
+				break; 
+			case 1 : 
+				this->reset_no_check();
+				break;
+			case 2 :
+				this->construct_from(*SWL_FWD(o));
+				break;
+			case 3 : 
+				**this = *SWL_FWD(o);
+				break;
+		}
+		return *this;
+	}
+	
 	constexpr void reset_no_check(){
 		if constexpr (not std::is_trivially_destructible_v<T>){
 			value_.~T();
