@@ -19,7 +19,7 @@ namespace swl {
 #define SWL_MOV(x) static_cast<std::remove_reference_t<decltype(x)>&&>(x)
 #define SWL_FWD(x) static_cast<decltype(x)&&>(x)
 
-struct bad_optional_access : std::exception {
+struct bad_optional_access : final std::exception {
 	const char* what() const noexcept override {
 		return "bad_optional_access in swl::optional.";
 	}

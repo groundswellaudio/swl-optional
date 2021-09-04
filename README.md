@@ -11,9 +11,9 @@ The tests were adapted from [TartanLlama's optional](https://github.com/TartanLl
 with some bits from the LLVM repo. Kudos to them. \
 To run the tests : \
 `mkdir ./test_out` \
-`cd test_out' \
+`cd test_out` \
 `cmake ../` \
-`ctest --build-and-test ../ ./ --build-generator "Unix Makefiles"` (replace `Unix Makefiles` as needed) \
+`ctest --build-and-test ../ ./ --build-generator "Unix Makefiles"` (replace "Unix Makefiles" as needed) \
 `make test` 
 
 ## Tested compilers
