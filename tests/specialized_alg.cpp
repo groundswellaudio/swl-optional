@@ -3,7 +3,7 @@
 #include <tuple>
 #include <vector>
 
-inline void specialized_alg() {
+int main() {
   auto o1 = swl::make_optional(42);
   auto o2 = swl::optional<int>(42);
 

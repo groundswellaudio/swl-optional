@@ -1,7 +1,6 @@
 #include "test_util.hpp"
 
-inline void constexpr_op() {
-
+int main(){
   {
     constexpr swl::optional<int> o2{};
     constexpr swl::optional<int> o3 = {};

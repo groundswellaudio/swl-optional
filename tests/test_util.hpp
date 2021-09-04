@@ -2,6 +2,7 @@
 #include <swl/optional.hpp>
 #include <tuple>
 #include <vector>
+#include <cassert>
 
 struct takes_init_and_variadic {
   std::vector<int> v;

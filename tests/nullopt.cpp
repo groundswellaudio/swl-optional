@@ -1,6 +1,6 @@
 #include "test_util.hpp"
 
-inline void nullopt() {
+int main() {
   swl::optional<int> o1 = swl::nullopt;
   swl::optional<int> o2{swl::nullopt};
   swl::optional<int> o3(swl::nullopt);

@@ -9,9 +9,12 @@ So if you're using `optional`a lot in C++20, switching to this implementation is
 ## Testing
 The tests were adapted from [TartanLlama's optional](https://github.com/TartanLlama/optional) 
 with some bits from the LLVM repo. Kudos to them. \
-To build all the tests, compile `./tests/test_main.cpp` including 
-the root of the repository in the search path, e.g. : \
-`g++ -std=c++20 ./tests/test_main.cpp -I .`
+To run the tests : \
+`mkdir ./test_out` \
+`cd test_out' \
+`cmake ../` \
+`ctest --build-and-test ../ ./ --build-generator "Unix Makefiles"` (replace `Unix Makefiles` as needed) \
+`make test` 
 
 ## Tested compilers
 - GCC 11+

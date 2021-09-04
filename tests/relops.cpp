@@ -1,6 +1,6 @@
 #include "test_util.hpp"
 
-inline void relops() {
+int main() {
   swl::optional<int> o1{4};
   swl::optional<int> o2{42};
   swl::optional<int> o3{};

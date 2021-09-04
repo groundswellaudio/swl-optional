@@ -7,7 +7,7 @@ struct foo {
   foo(foo&&) {};
 };
 
-inline void constructors() {
+int main(){
   swl::optional<int> o1;
   assert(!o1);
 

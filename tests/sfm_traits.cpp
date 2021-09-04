@@ -1,7 +1,7 @@
 #include "test_util.hpp"
 #include <type_traits>
 
-inline void sfm_traits() {
+int main() {
     static_assert(std::is_trivially_copy_constructible<swl::optional<int>>::value);
     static_assert(std::is_trivially_copy_assignable<swl::optional<int>>::value);
     static_assert(std::is_trivially_move_constructible<swl::optional<int>>::value);

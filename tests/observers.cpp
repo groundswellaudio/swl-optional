@@ -6,7 +6,7 @@ struct move_detector {
   bool been_moved = false;
 };
 
-inline void observers() {
+int main()  {
   swl::optional<int> o1 = 42;
   swl::optional<int> o2;
   const swl::optional<int> o3 = 42;

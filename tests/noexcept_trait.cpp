@@ -1,6 +1,6 @@
 #include "test_util.hpp"
 
-inline void noexcept_trait() {
+int main() {
   swl::optional<int> o1{4};
   swl::optional<int> o2{42};
 

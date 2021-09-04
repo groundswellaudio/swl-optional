@@ -26,7 +26,7 @@ inline void test_hash_disabled_for_type(){
 	static_assert( not requires{ std::hash<T>{}; } );
 }
 
-inline void hash()
+int main()
 {
 	using namespace hash_test_impl;
 	using swl::optional;

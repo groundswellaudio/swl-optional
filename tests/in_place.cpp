@@ -5,7 +5,7 @@
 #include <vector>
 #include <cassert>
 
-inline void in_place() {
+int main() {
   swl::optional<int> o1{swl::in_place};
   swl::optional<int> o2(swl::in_place);
   assert(o1);

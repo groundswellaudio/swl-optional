@@ -104,7 +104,7 @@ void test_swap_sfinae() {
 
 } // SWAP_IMPL 
 
-inline void swap()
+int main() 
 {
 	using namespace swap_impl;
 	using swl::optional;

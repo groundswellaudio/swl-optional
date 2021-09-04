@@ -3,7 +3,7 @@
 #include <tuple>
 #include <cassert>
 
-inline void emplace() {
+int main(){
     swl::optional<std::pair<std::pair<int,int>, std::pair<double, double>>> i;
     i.emplace(std::piecewise_construct, std::make_tuple(0,2), std::make_tuple(3,4));
     assert(i->first.first == 0);
