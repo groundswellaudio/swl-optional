@@ -14,10 +14,25 @@
 #include <functional>
 #include <compare>
 
+#if !defined(__cpp_exceptions) || __cpp_exceptions < 199711L
+	#define SWL_NO_EXCEPTIONS
+#endif
+
 namespace swl {
 
 #define SWL_MOV(x) static_cast<std::remove_reference_t<decltype(x)>&&>(x)
 #define SWL_FWD(x) static_cast<decltype(x)&&>(x)
+
+namespace oimpl {
+	template <class E>
+	constexpr void do_throw(auto&&... args) {
+		#ifdef SWL_NO_EXCEPTIONS
+		std::abort();
+		#else
+		throw E{SWL_FWD(args)...};
+		#endif
+	}
+}
 
 struct bad_optional_access final : std::exception {
 	const char* what() const noexcept override {
@@ -265,10 +280,10 @@ class optional {
 		return this->active;
 	}
 
-	constexpr auto&& value() &             { return bool(*this) ? **this : throw bad_optional_access{}; }
-	constexpr auto&& value() const &       { return bool(*this) ? **this : throw bad_optional_access{}; }
-	constexpr auto&& value() &&            { return bool(*this) ? static_cast<T&&>(value_) : throw bad_optional_access{}; }
-	constexpr auto&& value() const &&      { return bool(*this) ? static_cast<const T&&>(value_) : throw bad_optional_access{}; }
+	constexpr auto&& value() &             { return bool(*this) ? **this : oimpl::do_throw<bad_optional_access>(); }
+	constexpr auto&& value() const &       { return bool(*this) ? **this : oimpl::do_throw<bad_optional_access>(); }
+	constexpr auto&& value() &&            { return bool(*this) ? static_cast<T&&>(value_) : oimpl::do_throw<bad_optional_access>(); }
+	constexpr auto&& value() const &&      { return bool(*this) ? static_cast<const T&&>(value_) : oimpl::do_throw<bad_optional_access>(); }
 
 	template <class U>
 		requires (std::is_copy_constructible_v<T> && std::is_convertible_v<U&&, T>)
@@ -530,5 +545,6 @@ namespace std {
 
 #undef SWL_MOV
 #undef SWL_FWD
+#undef SWL_NO_EXCEPTIONS
 
 #endif // header guards
